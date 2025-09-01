@@ -1,0 +1,32 @@
+# Activar el motor de reescritura
+RewriteEngine On
+
+# Asegurarse de que "index.html" sea la página de inicio
+DirectoryIndex index.html
+
+# Redirigir todo a HTTPS (si tu hosting lo soporta)
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# URLs amigables para las páginas en /html/
+RewriteRule ^financiero$ html/financiero.html [L]
+
+# Manejo de errores personalizados
+ErrorDocument 404 /index.html
+
+# Proteger archivos sensibles
+<FilesMatch "(\.htaccess|\.env|composer\.json|package\.json)">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# Cache básica para mejorar performance
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>
